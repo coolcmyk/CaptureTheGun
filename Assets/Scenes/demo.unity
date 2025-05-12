@@ -1576,6 +1576,86 @@ Transform:
   - {fileID: 1291775223}
   m_Father: {fileID: 557578323}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1519338281 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6385869065926749809, guid: 87ae79321f03a15419d4cc233bec1bc7, type: 3}
+  m_PrefabInstance: {fileID: 5822123441233037965}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1519338291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519338281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ece08807320cd9efdb549d182f60f263, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useRootMotion: 0
+  rotateByWorld: 0
+  useContinuousSprint: 1
+  sprintOnlyFree: 1
+  locomotionType: 0
+  freeSpeed:
+    movementSmooth: 6
+    animationSmooth: 0.2
+    rotationSpeed: 16
+    walkByDefault: 0
+    rotateWithCamera: 0
+    walkSpeed: 2
+    runningSpeed: 4
+    sprintSpeed: 6
+  strafeSpeed:
+    movementSmooth: 6
+    animationSmooth: 0.2
+    rotationSpeed: 16
+    walkByDefault: 0
+    rotateWithCamera: 0
+    walkSpeed: 2
+    runningSpeed: 4
+    sprintSpeed: 6
+  jumpWithRigidbodyForce: 0
+  jumpAndRotate: 1
+  jumpTimer: 0.3
+  jumpHeight: 4
+  airSpeed: 5
+  airSmooth: 6
+  extraGravity: -10
+  limitFallVelocity: -15
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 1
+  groundMinDistance: 0.25
+  groundMaxDistance: 0.5
+  slopeLimit: 75
+  isAiming: 0
+  isAimingAndShooting: 0
+  isReloading: 0
+  isCrouching: 0
+--- !u!114 &1519338292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519338281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78081e600a4cd661dbd90dd53e816831, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  horizontalInput: Horizontal
+  verticallInput: Vertical
+  jumpInput: 32
+  strafeInput: 9
+  sprintInput: 304
+  rotateCameraXInput: Mouse X
+  rotateCameraYInput: Mouse Y
+  cc: {fileID: 0}
+  tpCamera: {fileID: 0}
+  cameraMain: {fileID: 0}
 --- !u!1 &1632422755
 GameObject:
   m_ObjectHideFlags: 0
@@ -1941,7 +2021,6 @@ MonoBehaviour:
   target: {fileID: 0}
   smoothCameraRotation: 12
   cullingLayer:
-    serializedVersion: 2
     m_Bits: 1
   lockCamera: 0
   rightOffset: 0
@@ -1958,6 +2037,24 @@ MonoBehaviour:
   currentStateName: 
   currentTarget: {fileID: 0}
   movementSpeed: {x: 0, y: 0}
+  targetLookAt: {fileID: 0}
+  currentTargetPos: {x: 0, y: 0, z: 0}
+  lookPoint: {x: 0, y: 0, z: 0}
+  current_cPos: {x: 0, y: 0, z: 0}
+  desired_cPos: {x: 0, y: 0, z: 0}
+  _camera: {fileID: 0}
+  distance: 5
+  mouseY: 0
+  mouseX: 0
+  currentHeight: 0
+  cullingDistance: 0
+  checkHeightRadius: 0.4
+  clipPlaneMargin: 0
+  forward: -1
+  xMinLimit: -360
+  xMaxLimit: 360
+  cullingHeight: 0.2
+  cullingMinDist: 0.1
 --- !u!1 &1910624283
 GameObject:
   m_ObjectHideFlags: 0
@@ -2243,7 +2340,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6385869065926749809, guid: 87ae79321f03a15419d4cc233bec1bc7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1519338292}
+    - targetCorrespondingSourceObject: {fileID: 6385869065926749809, guid: 87ae79321f03a15419d4cc233bec1bc7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1519338291}
   m_SourcePrefab: {fileID: 100100000, guid: 87ae79321f03a15419d4cc233bec1bc7, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
