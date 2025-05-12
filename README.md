@@ -3,6 +3,16 @@
 ## Overview
 CaptureTheGun is a single-player 3D puzzle game with a third-person perspective. Players take on the role of a detective who must locate a hidden gun to apprehend a criminal. However, there's a twist - you're trapped in a room with a dangerous criminal who appears to be your "good friend." You'll need to solve various CTF (Capture The Flag) style puzzles to find the gun left behind by your detective partner while avoiding suspicion from the criminal.
 
+## System's Architecture Diagram
+### Entity Relationship Diagram
+![Entity Relationship Diagram](Assets/README/ERD.png)
+
+### System Flow Chart
+![Flow Chart Diagram](Assets/README/FLOWCHART.png)
+
+### UML Class Diagram
+![UML Class Diagram](Assets/README/UML.png)
+
 ## Gameplay Features
 
 ### Core Mechanics
@@ -56,15 +66,19 @@ Assets/
 - **Utils**: Helper scripts for puzzle logic, encoding/decoding tools, and suspicion system
 
 ## Development Status
-*[Current development status information will be added here]*
-
-## Technical Requirements
-- **Engine**: Unity (Version TBD)
-- **Platforms**: PC (Windows) initially, with potential for additional platforms
-- **Input**: Keyboard and mouse, with potential gamepad support
 
 ## Team
-*[Team information will be added here]*
+
+| Member | GitHub |
+|--------|--------|
+| coolcmyk | [![GitHub](https://img.shields.io/github/followers/coolcmyk?label=coolcmyk&style=social)](https://github.com/coolcmyk) |
+
+<div align="center">
+  <a href="https://github.com/coolcmyk">
+    <img height="180em" src="https://github-readme-stats.vercel.app/api?username=coolcmyk&show_icons=true&theme=default&include_all_commits=true&count_private=true"/>
+    <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=coolcmyk&layout=compact&langs_count=10&theme=default"/>
+  </a>
+</div>
 
 ## Screenshots
 *[Screenshots will be added here when available]*
