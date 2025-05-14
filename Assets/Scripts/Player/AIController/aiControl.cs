@@ -26,6 +26,26 @@ namespace Invector.vCharacterController
         private bool wasRunning = false;
         private bool wasSprinting = false;
 
+        [Header("Physics Settings")]
+        [Range(1f, 20f)]
+        public float accelerationRate = 8f;  // How quickly the AI reaches target speed
+        [Range(1f, 20f)] 
+        public float decelerationRate = 10f; // How quickly the AI slows down
+        [Range(0f, 1f)]
+        public float groundFriction = 0.6f;  // Friction coefficient for movement
+        private Vector3 currentHorizontalVelocity = Vector3.zero;
+
+        [Header("Dynamic Movement")]
+        [Tooltip("Distance at which AI will start sprinting to catch up")]
+        public float sprintDistance = 15f;
+        [Tooltip("Distance at which AI will start running")]
+        public float runDistance = 8f;
+        [Tooltip("Distance at which AI will walk slowly/cautiously")]
+        public float cautionDistance = 3f;
+        [Tooltip("Speed multiplier when in caution zone (very close to target)")]
+        [Range(0.1f, 1f)]
+        public float cautionSpeedMultiplier = 0.5f;
+
         // Private variables
         private NavMeshAgent navAgent;
         private vThirdPersonController controller;
@@ -53,6 +73,12 @@ namespace Invector.vCharacterController
                 controller.isGrounded = true;
                 controller.lockMovement = false;
                 controller.lockRotation = false;
+                
+                // ANTI-SLIDING FIX: Set gravity and ground settings
+                controller.groundDistance = 0.1f;
+                controller.groundMinDistance = 0.02f;
+                controller.groundMaxDistance = 0.15f;
+                controller.groundLayer = LayerMask.GetMask("Default");
             }
             
             // Configure NavMeshAgent for best results with Invector
@@ -71,6 +97,11 @@ namespace Invector.vCharacterController
             {
                 animator.enabled = true;
                 animator.updateMode = AnimatorUpdateMode.Normal;
+                
+                // ANTI-SLIDING FIX: Reset all animation parameters
+                animator.SetFloat("InputHorizontal", 0);
+                animator.SetFloat("InputVertical", 0);
+                animator.SetFloat("InputMagnitude", 0);
             }
         }
 
@@ -113,18 +144,36 @@ namespace Invector.vCharacterController
                 // Convert world direction to local
                 Vector3 localDesiredVelocity = transform.InverseTransformDirection(desiredVelocity.normalized);
                 
-                // Calculate distance factor (0-1) for speed determination
-                float distanceFactor = Mathf.Clamp01(distToPlayer / (minDistanceToFollow * 5f));
-                
-                // Determine speed mode based on distance
+                // DYNAMIC MOVEMENT: Calculate speed based on distance to player
                 float speedMultiplier = 1.0f;
-                bool shouldRun = useRunAnimation && distanceFactor > runThreshold;
-                bool shouldSprint = useSprintAnimation && distanceFactor > sprintThreshold;
+                bool shouldRun = false;
+                bool shouldSprint = false;
+                bool cautionMode = false;
                 
-                if (shouldSprint)
-                    speedMultiplier = 1.5f; // Sprint speed
-                else if (shouldRun)
-                    speedMultiplier = 1.25f; // Run speed
+                // Determine movement behavior based on distance
+                if (distToPlayer > sprintDistance)
+                {
+                    // Far away - sprint to catch up quickly
+                    speedMultiplier = 1.5f;
+                    shouldSprint = true;
+                }
+                else if (distToPlayer > runDistance)
+                {
+                    // Medium distance - run
+                    speedMultiplier = 1.25f;
+                    shouldRun = true;
+                }
+                else if (distToPlayer < cautionDistance)
+                {
+                    // Very close - move cautiously
+                    speedMultiplier = cautionSpeedMultiplier;
+                    cautionMode = true;
+                }
+                else
+                {
+                    // Normal walking distance
+                    speedMultiplier = 1.0f;
+                }
                 
                 // Apply to controller input with speed-based magnitude
                 controller.input = new Vector3(
@@ -141,12 +190,18 @@ namespace Invector.vCharacterController
                     controller.inputMagnitude = Mathf.Lerp(controller.inputMagnitude, 1.5f, Time.deltaTime * 4f);
                 else if (shouldRun)
                     controller.inputMagnitude = Mathf.Lerp(controller.inputMagnitude, 1.0f, Time.deltaTime * 3f);
+                else if (cautionMode)
+                    controller.inputMagnitude = Mathf.Lerp(controller.inputMagnitude, 0.3f, Time.deltaTime * 5f); // Slower animation for caution
                 else
-                    controller.inputMagnitude = Mathf.Lerp(controller.inputMagnitude, 0.5f, Time.deltaTime * 2f);
+                    controller.inputMagnitude = Mathf.Lerp(controller.inputMagnitude, 0.7f, Time.deltaTime * 2f);
                 
-                // Debug visualization
-                Debug.DrawRay(transform.position + Vector3.up, desiredVelocity.normalized, 
-                             shouldSprint ? Color.red : (shouldRun ? Color.yellow : Color.blue), 0.1f);
+                // Debug visualization with color coding based on movement mode
+                Color debugColor = Color.blue; // Default walking
+                if (shouldSprint) debugColor = Color.red;
+                else if (shouldRun) debugColor = Color.yellow;
+                else if (cautionMode) debugColor = Color.green;
+                
+                Debug.DrawRay(transform.position + Vector3.up, desiredVelocity.normalized, debugColor, 0.1f);
                 
                 // Handle transitions between movement states for smoother animations
                 if (shouldSprint != wasSprinting || shouldRun != wasRunning)
@@ -200,6 +255,27 @@ namespace Invector.vCharacterController
 
             // Handle situational animations based on situation
             HandleSituationalAnimations(distToPlayer);
+
+            // ANTI-SLIDING FIX: Force proper ground detection
+            if (controller != null)
+            {
+                // Can't call CheckGround() directly as it's protected
+                // Instead, call UpdateMotor() which calls CheckGround() internally
+                controller.UpdateMotor();
+                
+                // Ensure we're using proper friction parameters
+                if (controller.isGrounded)
+                {
+                    // Apply a downward force to stay grounded
+                    controller.verticalVelocity = -0.1f;  // Fixed: This should be a float, not Vector3
+                    
+                    // Sync positions with NavMeshAgent only when grounded
+                    navAgent.nextPosition = transform.position;
+                }
+                
+                // Update animations with correct grounded state
+                controller.UpdateAnimator();
+            }
         }
         
         void FixedUpdate()
@@ -209,8 +285,19 @@ namespace Invector.vCharacterController
             // Use FixedUpdate for character movement/physics
             controller.UpdateMotor();
             
+            // DYNAMIC MOVEMENT: Adjust smoothing based on movement type
+            float smoothFactor;
+            if (wasSprinting)
+                smoothFactor = 12f; // Quick response for sprinting
+            else if (wasRunning)
+                smoothFactor = 9f;  // Medium response for running
+            else if (controller.inputMagnitude < 0.5f) 
+                smoothFactor = 4f;  // Very smooth for caution movement
+            else
+                smoothFactor = 7f;  // Normal walking
+            
             // Smoothly interpolate input for animations
-            controller.inputSmooth = Vector3.Lerp(controller.inputSmooth, controller.input, 8f * Time.fixedDeltaTime);
+            controller.inputSmooth = Vector3.Lerp(controller.inputSmooth, controller.input, smoothFactor * Time.fixedDeltaTime);
             
             // Set the move direction from input
             controller.moveDirection = controller.input;
@@ -239,26 +326,37 @@ namespace Invector.vCharacterController
             }
         }
 
-        // Add this to your Update method to automatically trigger situational animations
+        // Update your HandleSituationalAnimations method:
         private void HandleSituationalAnimations(float distToPlayer)
         {
-            // Example: Trigger a reaction when getting very close to the player
-            if (distToPlayer < minDistanceToFollow * 0.5f && !wasSprinting)
+            // DYNAMIC MOVEMENT: Add more situation-specific animations
+            
+            // Very close to player - occasional dodging/strafing
+            if (distToPlayer < cautionDistance)
             {
-                // This will work if your animator has these triggers defined
-                if (Random.Range(0, 100) < 5) // 5% chance per frame when close
+                // Lower chance when very close (5% per frame)
+                if (Random.Range(0, 100) < 5 && !wasSprinting)
                 {
                     if (alwaysFaceTarget)
                     {
-                        // If we're using strafe mode and facing the player
-                        TriggerSituationalAnimation("StrafeLeft");
-                        // or TriggerSituationalAnimation("StrafeRight");
+                        // Randomly pick left or right strafe
+                        string strafeDir = Random.Range(0, 2) == 0 ? "StrafeLeft" : "StrafeRight";
+                        TriggerSituationalAnimation(strafeDir);
                     }
                 }
             }
+            // Medium distance - occasional defensive postures
+            else if (distToPlayer < runDistance)
+            {
+                // Very rare chance (0.5% per frame) of special animation in medium range
+                if (Random.Range(0, 1000) < 5)
+                {
+                    TriggerSituationalAnimation("Defend");
+                }
+            }
             
-            // Example: Trigger a jump animation when encountering a height difference
-            if (controller.isGrounded && controller.input.magnitude > 0.1f)
+            // Jump over obstacles when moving at speed
+            if (controller.isGrounded && controller.input.magnitude > 0.5f)
             {
                 Ray ray = new Ray(transform.position + Vector3.up * 0.1f, transform.forward);
                 RaycastHit hit;

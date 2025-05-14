@@ -12,10 +12,29 @@
 //         public bool alwaysFaceTarget = true;
 
 //         [Header("Movement Settings")]
-//         public float moveSpeed = 3f;
+//         public float moveSpeed = 1f;
 //         public float rotationSpeed = 10f;
 //         public float updatePathInterval = 0.5f;
-        
+
+//         [Header("Animation Settings")]
+//         public bool useRunAnimation = true;
+//         public bool useSprintAnimation = true;
+//         [Range(0f, 1f)]
+//         public float runThreshold = 0.5f;
+//         [Range(0f, 1f)]
+//         public float sprintThreshold = 0.8f;
+//         private bool wasRunning = false;
+//         private bool wasSprinting = false;
+
+//         [Header("Physics Settings")]
+//         [Range(1f, 20f)]
+//         public float accelerationRate = 8f;  // How quickly the AI reaches target speed
+//         [Range(1f, 20f)] 
+//         public float decelerationRate = 10f; // How quickly the AI slows down
+//         [Range(0f, 1f)]
+//         public float groundFriction = 0.6f;  // Friction coefficient for movement
+//         private Vector3 currentHorizontalVelocity = Vector3.zero;
+
 //         // Private variables
 //         private NavMeshAgent navAgent;
 //         private vThirdPersonController controller;
@@ -43,6 +62,12 @@
 //                 controller.isGrounded = true;
 //                 controller.lockMovement = false;
 //                 controller.lockRotation = false;
+                
+//                 // ANTI-SLIDING FIX: Set gravity and ground settings
+//                 controller.groundDistance = 0.1f;
+//                 controller.groundMinDistance = 0.02f;
+//                 controller.groundMaxDistance = 0.15f;
+//                 controller.groundLayer = LayerMask.GetMask("Default");
 //             }
             
 //             // Configure NavMeshAgent for best results with Invector
@@ -61,6 +86,11 @@
 //             {
 //                 animator.enabled = true;
 //                 animator.updateMode = AnimatorUpdateMode.Normal;
+                
+//                 // ANTI-SLIDING FIX: Reset all animation parameters
+//                 animator.SetFloat("InputHorizontal", 0);
+//                 animator.SetFloat("InputVertical", 0);
+//                 animator.SetFloat("InputMagnitude", 0);
 //             }
 //         }
 
@@ -103,23 +133,58 @@
 //                 // Convert world direction to local
 //                 Vector3 localDesiredVelocity = transform.InverseTransformDirection(desiredVelocity.normalized);
                 
-//                 // Apply to controller input with INCREASED magnitude for more reliable movement
+//                 // Calculate distance factor (0-1) for speed determination
+//                 float distanceFactor = Mathf.Clamp01(distToPlayer / (minDistanceToFollow * 5f));
+                
+//                 // Determine speed mode based on distance
+//                 float speedMultiplier = 1.0f;
+//                 bool shouldRun = useRunAnimation && distanceFactor > runThreshold;
+//                 bool shouldSprint = useSprintAnimation && distanceFactor > sprintThreshold;
+                
+//                 if (shouldSprint)
+//                     speedMultiplier = 1.5f; // Sprint speed
+//                 else if (shouldRun)
+//                     speedMultiplier = 1.25f; // Run speed
+                
+//                 // Apply to controller input with speed-based magnitude
 //                 controller.input = new Vector3(
 //                     localDesiredVelocity.x, 
 //                     0f, 
 //                     localDesiredVelocity.z
-//                 ) * 1.25f;  // Increase input strength by 25%
+//                 ) * speedMultiplier;
                 
-//                 // Ensure input is strong enough to move
-//                 if (controller.input.magnitude < 0.5f)
-//                     controller.input = controller.input.normalized * 0.75f;
-                    
+//                 // Update sprint state for animation
+//                 controller.isSprinting = shouldSprint;
+                
+//                 // Improve input magnitude to better match animations
+//                 if (shouldSprint)
+//                     controller.inputMagnitude = Mathf.Lerp(controller.inputMagnitude, 1.5f, Time.deltaTime * 4f);
+//                 else if (shouldRun)
+//                     controller.inputMagnitude = Mathf.Lerp(controller.inputMagnitude, 1.0f, Time.deltaTime * 3f);
+//                 else
+//                     controller.inputMagnitude = Mathf.Lerp(controller.inputMagnitude, 0.5f, Time.deltaTime * 2f);
+                
 //                 // Debug visualization
-//                 Debug.DrawRay(transform.position + Vector3.up, desiredVelocity.normalized, Color.blue, 0.1f);
+//                 Debug.DrawRay(transform.position + Vector3.up, desiredVelocity.normalized, 
+//                              shouldSprint ? Color.red : (shouldRun ? Color.yellow : Color.blue), 0.1f);
+                
+//                 // Handle transitions between movement states for smoother animations
+//                 if (shouldSprint != wasSprinting || shouldRun != wasRunning)
+//                 {
+//                     // Update animator params right away for faster response
+//                     controller.UpdateAnimator();
+//                 }
+                
+//                 wasRunning = shouldRun;
+//                 wasSprinting = shouldSprint;
 //             }
 //             else
 //             {
 //                 controller.input = Vector3.zero;
+//                 controller.isSprinting = false;
+//                 controller.inputMagnitude = Mathf.Lerp(controller.inputMagnitude, 0f, Time.deltaTime * 3f);
+//                 wasRunning = false;
+//                 wasSprinting = false;
 //             }
             
 //             // Face target if needed
@@ -152,6 +217,30 @@
 //             // Update animations
 //             controller.isGrounded = true;
 //             controller.UpdateAnimator();
+
+//             // Handle situational animations based on situation
+//             HandleSituationalAnimations(distToPlayer);
+
+//             // ANTI-SLIDING FIX: Force proper ground detection
+//             if (controller != null)
+//             {
+//                 // Can't call CheckGround() directly as it's protected
+//                 // Instead, call UpdateMotor() which calls CheckGround() internally
+//                 controller.UpdateMotor();
+                
+//                 // Ensure we're using proper friction parameters
+//                 if (controller.isGrounded)
+//                 {
+//                     // Apply a downward force to stay grounded
+//                     controller.verticalVelocity = -0.1f;  // Fixed: This should be a float, not Vector3
+                    
+//                     // Sync positions with NavMeshAgent only when grounded
+//                     navAgent.nextPosition = transform.position;
+//                 }
+                
+//                 // Update animations with correct grounded state
+//                 controller.UpdateAnimator();
+//             }
 //         }
         
 //         void FixedUpdate()
@@ -178,6 +267,49 @@
                 
 //                 // Restore original setting after movement
 //                 controller.useRootMotion = originalRootMotion;
+//             }
+//         }
+
+//         // Call this from Update when appropriate (e.g., when getting close to player)
+//         private void TriggerSituationalAnimation(string triggerName)
+//         {
+//             Animator animator = controller.GetComponent<Animator>();
+//             if (animator != null && !animator.GetCurrentAnimatorStateInfo(0).IsName(triggerName))
+//             {
+//                 animator.SetTrigger(triggerName);
+//             }
+//         }
+
+//         // Add this to your Update method to automatically trigger situational animations
+//         private void HandleSituationalAnimations(float distToPlayer)
+//         {
+//             // Example: Trigger a reaction when getting very close to the player
+//             if (distToPlayer < minDistanceToFollow * 0.5f && !wasSprinting)
+//             {
+//                 // This will work if your animator has these triggers defined
+//                 if (Random.Range(0, 100) < 5) // 5% chance per frame when close
+//                 {
+//                     if (alwaysFaceTarget)
+//                     {
+//                         // If we're using strafe mode and facing the player
+//                         TriggerSituationalAnimation("StrafeLeft");
+//                         // or TriggerSituationalAnimation("StrafeRight");
+//                     }
+//                 }
+//             }
+            
+//             // Example: Trigger a jump animation when encountering a height difference
+//             if (controller.isGrounded && controller.input.magnitude > 0.1f)
+//             {
+//                 Ray ray = new Ray(transform.position + Vector3.up * 0.1f, transform.forward);
+//                 RaycastHit hit;
+//                 if (Physics.Raycast(ray, out hit, 1.5f))
+//                 {
+//                     if (hit.normal.y < 0.7f && hit.normal.y > 0.1f) // Sloped surface ahead
+//                     {
+//                         controller.Jump(); // This will trigger jump animation if available
+//                     }
+//                 }
 //             }
 //         }
 //     }
