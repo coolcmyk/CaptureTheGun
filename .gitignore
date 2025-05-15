@@ -77,3 +77,7 @@ crashlytics-build.properties
 .idea
 
 .vscode/
+
+
+#for cache
+/*.blob
