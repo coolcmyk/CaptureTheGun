@@ -15,6 +15,8 @@ public class Criminal {
     @ManyToOne
     private Room room;
 
+    private int suspicion; // 0 = not suspicious, higher = more suspicious
+
     // Getters and Setters
     public int getCriminalId() {
         return criminalId;
@@ -28,7 +30,7 @@ public class Criminal {
     public Room getRoom() {
         return room;
     }
-
+    public int getSuspicion() { return suspicion; }
 
     public void setCriminalId(int criminalId) {
         this.criminalId = criminalId;
@@ -42,6 +44,7 @@ public class Criminal {
     public void setRoom(Room room) {
         this.room = room;
     }
+    public void setSuspicion(int suspicion) { this.suspicion = suspicion; }
 
     @Override
     public String toString() {

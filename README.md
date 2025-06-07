@@ -1,7 +1,34 @@
-# CaptureTheGun
+# CaptureTheGun: Re:Load
 
 ## Overview
-CaptureTheGun is a single-player 3D puzzle game with a third-person perspective. Players take on the role of a detective who must locate a hidden gun to apprehend a criminal. However, there's a twist - you're trapped in a room with a dangerous criminal who appears to be your "good friend." You'll need to solve various CTF (Capture The Flag) style puzzles to find the gun left behind by your detective partner while avoiding suspicion from the criminal.
+CaptureTheGun is a single-player 3D puzzle game inspired by the psychological tension and time-loop mechanics of *Re:Zero* and the anime aesthetic of *MiSide*. Players take on the role of a detective trapped in a room with a dangerous childhood friend, now a criminal. The game features CTF (Capture The Flag) style puzzles, deep lore, and a unique blend of suspense and strategy.
+
+### Key Inspirations
+- **Re:Zero**: Time-loop mechanic—when the player dies, they return to a previous checkpoint, retaining knowledge but not progress.
+- **MiSide**: Anime-inspired visuals and atmosphere, with a focus on psychological tension and character-driven narrative.
+
+## Unique Mechanics
+
+### Time Loop & Death Consequences
+- **5 Seconds Before Death**: Each time the MC (main character) dies, they relive the last 5 seconds before death, then return to a checkpoint.
+- **Sanity Parameter**: Every death increases the MC's insanity. On every 5th death, there's a 75% chance the MC will commit suicide, resulting in a unique game over and narrative consequences.
+- **Memory Retention**: The MC remembers clues and puzzle solutions from previous loops, allowing for meta-progression.
+
+### Suspicion System
+- **Criminal Childhood Friend**: The main antagonist is the MC's childhood friend, now a criminal, who closely observes the player's actions.
+- **Suspicion Meter**: Using tools or taking too long to solve puzzles increases the criminal's suspicion. If suspicion gets too high, the criminal may attack or sabotage the MC.
+- **Stealth Puzzle Solving**: Players must balance solving puzzles efficiently while avoiding actions that raise suspicion.
+
+### CTF-Style Puzzles
+- **Puzzle Variety**: Includes cryptographic challenges, hidden clues, environmental puzzles, and more, inspired by CTF competitions.
+- **Tool Usage**: Tools are hidden throughout the environment and must be used carefully to avoid detection.
+
+## Gameplay Features
+
+- **Third-person exploration**: Navigate detailed, anime-inspired environments.
+- **Deep Lore**: Uncover the backstory of the MC, the criminal, and the mysterious circumstances trapping them together.
+- **Multiple Endings**: Outcomes depend on sanity, suspicion, and puzzle-solving efficiency.
+- **Meta-progression**: Use knowledge from previous loops to solve puzzles faster and unlock new narrative paths.
 
 ## System's Architecture Diagram
 ### Entity Relationship Diagram
@@ -13,64 +40,34 @@ CaptureTheGun is a single-player 3D puzzle game with a third-person perspective.
 ### UML Class Diagram
 ![UML Class Diagram](Assets/README/UML.png)
 
-## Gameplay Features
-
-### Core Mechanics
-- **Third-person exploration**: Navigate through detailed environments while solving puzzles
-- **CTF-style puzzles**: Decode clues and find hidden "flags" that reveal the gun's location
-- **Suspicion meter**: Be careful not to raise the criminal's suspicion or face deadly consequences
-- **Hidden tools**: Discover and use various tools throughout the environment
-
-### Puzzle Elements
-- Various puzzle types inspired by CTF challenges:
-  - Cryptographic puzzles (base64 encoding/decoding)
-  - Hidden visual clues in environmental objects (paintings, photographs)
-  - Coordinates and geographical puzzles
-  - Pattern recognition challenges
-  - 3D environmental puzzles
-
-### Suspicion System
-Players must balance puzzle-solving with maintaining a low suspicion level. If the suspicion meter reaches maximum, the criminal will attack the player with a knife, resulting in game over.
-
 ## Game Objectives
-1. Locate the hidden gun by solving a series of interconnected puzzles
-2. Maintain a low suspicion level to avoid being killed
-3. Use the environment and hidden tools to your advantage
-4. Once the gun is found, apprehend the criminal
+1. Solve interconnected CTF-style puzzles to locate the hidden gun.
+2. Manage the MC's sanity and avoid repeated deaths.
+3. Keep the criminal's suspicion low to survive.
+4. Use environmental tools and clues wisely.
+5. Discover the truth behind the time loop and the criminal's motives.
 
 ## Game Environment
-The game takes place in detailed indoor environments with interactive objects that may:
-- Contain hidden clues
-- Function as puzzle elements
-- Conceal tools (like a stove hiding a base64 encoder/decoder)
-- Act as red herrings to distract the player
+The game is set in a richly detailed indoor environment with interactive objects, hidden clues, and red herrings. Every object could be a clue, a tool, or a trap.
 
 ## Project Structure
-The game is built using Unity and follows a modular organization structure:
 
 ```
 Assets/
 ├── Scenes/         - Game scenes including levels, main menu, etc.
-├── Artworks/       - Visual assets, textures, and artistic elements
+├── Artworks/       - Visual assets, textures, and anime-inspired elements
 ├── TextMesh Pro/   - Text rendering and UI font system
 ├── Prefabs/        - Reusable game objects and components
 ├── Model/          - 3D models for characters, environments, and props
 └── Utils/          - Utility scripts and helper functions
 ```
 
-### Key Components
-- **Scenes**: Contains different game levels and environments where the player will solve puzzles
-- **Artworks**: Visual elements including textures, UI components, and 2D art assets
-- **Models**: 3D assets for the detective, criminal, furniture, and interactive objects
-- **Prefabs**: Pre-configured game objects like puzzle components, tools, and interactive elements
-- **Utils**: Helper scripts for puzzle logic, encoding/decoding tools, and suspicion system
-
 ## Development Status
 
 ## Team
 
-| Member | GitHub |
-|--------|--------|
+| Member   | GitHub |
+|----------|--------|
 | coolcmyk | [![GitHub](https://img.shields.io/github/followers/coolcmyk?label=coolcmyk&style=social)](https://github.com/coolcmyk) |
 
 <div align="center">
@@ -85,4 +82,4 @@ Assets/
 
 ---
 
-*CaptureTheGun combines elements of escape room puzzles, detective work, and the tension of being trapped with a dangerous criminal. Every object could be a clue, a tool, or a trap - choose wisely and stay vigilant!*
+*CaptureTheGun* combines time-loop suspense, CTF puzzle-solving, and anime-inspired psychological drama. Every death, every clue, and every suspicious glance brings you closer to the truth—or to your own unraveling.

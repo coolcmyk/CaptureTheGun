@@ -14,6 +14,8 @@ public class Puzzle {
 
     private boolean solved;
 
+    private boolean remembered;
+
     @ManyToOne
     private Room room;
 
@@ -61,6 +63,9 @@ public class Puzzle {
     public void setFlags(List<Flag> flags) {
         this.flags = flags;
     }
+
+    public boolean isRemembered() { return remembered; }
+    public void setRemembered(boolean remembered) { this.remembered = remembered; }
 
     @Override
     public String toString() {

@@ -35,7 +35,6 @@ public class CriminalController {
         return criminalRepository.findById(id).map(criminal -> {
             criminal.setName(criminalDetails.getName());
             criminal.setArmed(criminalDetails.isArmed());
-            // Set other fields as needed
             return criminalRepository.save(criminal);
         }).orElseGet(() -> {
             criminalDetails.setCriminalId(id);

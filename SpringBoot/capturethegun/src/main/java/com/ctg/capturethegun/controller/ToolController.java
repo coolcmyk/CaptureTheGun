@@ -35,7 +35,6 @@ public class ToolController {
         return toolRepository.findById(id).map(tool -> {
             tool.setName(toolDetails.getName());
             tool.setFunction(toolDetails.getFunction());
-            // Set other fields as needed
             return toolRepository.save(tool);
         }).orElseGet(() -> {
             toolDetails.setToolId(id);

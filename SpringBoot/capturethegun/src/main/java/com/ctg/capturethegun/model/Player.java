@@ -10,8 +10,10 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int playerId;
 
+    private int sanity;
     private String name;
-
+    private int deathCount;
+    private int loopCount;
     private int suspicionLevel;
 
     @OneToMany(mappedBy = "player")
@@ -27,6 +29,11 @@ public class Player {
     private Weapon weapon;
 
     // Getters and Setters
+    public int getSanity() {return sanity;}
+
+    public int getDeathCount() {return deathCount;}
+
+    public int getLoopCount() {return loopCount;}
 
     public String getName() {
         return name;
@@ -72,6 +79,12 @@ public class Player {
     public void setWeapon(Weapon weapon) {
         this.weapon = weapon;
     }
+
+    public void setSanity(int sanity) {this.sanity = sanity;}
+
+    public void setDeathCount(int deathCount) {this.deathCount = deathCount;}
+
+    public void setLoopCount(int loopCount) {this.loopCount = loopCount;}
 
     
     @Override

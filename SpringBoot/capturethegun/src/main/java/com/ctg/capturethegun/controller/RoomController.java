@@ -34,7 +34,6 @@ public class RoomController {
     public Room updateRoom(@PathVariable int id, @RequestBody Room roomDetails) {
         return roomRepository.findById(id).map(room -> {
             room.setDescription(roomDetails.getDescription());
-            // Set other fields as needed
             return roomRepository.save(room);
         }).orElseGet(() -> {
             roomDetails.setRoomId(id);

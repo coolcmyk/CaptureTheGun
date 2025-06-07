@@ -35,7 +35,6 @@ public class PuzzleController {
         return puzzleRepository.findById(id).map(puzzle -> {
             puzzle.setType(puzzleDetails.getType());
             puzzle.setSolved(puzzleDetails.isSolved());
-            // Set other fields as needed
             return puzzleRepository.save(puzzle);
         }).orElseGet(() -> {
             puzzleDetails.setPuzzleId(id);
