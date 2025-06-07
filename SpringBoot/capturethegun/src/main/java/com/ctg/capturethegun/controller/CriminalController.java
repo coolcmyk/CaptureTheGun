@@ -27,7 +27,7 @@ public class CriminalController {
 
     @PostMapping
     public Criminal createCriminal(@RequestBody Criminal criminal) {
-        return criminalRepository.saveCriminals(criminal);
+        return criminalRepository.save(criminal);
     }
 
     @PutMapping("/{id}")

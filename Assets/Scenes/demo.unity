@@ -26392,7 +26392,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -249.5, y: -15.000061}
+  m_AnchoredPosition: {x: -249.5, y: -15}
   m_SizeDelta: {x: 250, y: -30}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &377956196
@@ -51329,7 +51329,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -249.5, y: -15.000061}
+  m_AnchoredPosition: {x: -249.5, y: -15}
   m_SizeDelta: {x: 250, y: -30}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &717779996
@@ -72207,7 +72207,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -249.5, y: -15.000061}
+  m_AnchoredPosition: {x: -249.5, y: -15}
   m_SizeDelta: {x: 250, y: -30}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &955561228
@@ -78511,7 +78511,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00012207031, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -69, y: -43.206}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1051773180
@@ -143906,11 +143906,115 @@ MonoBehaviour:
   startItems:
   - id: 11
     name: 
+    amount: 999
+    attributes:
+    - name: 2
+      value: 25
+      isOpen: 0
+      isBool: 0
+    - name: 6
+      value: 2147483647
+      isOpen: 0
+      isBool: 0
+    - name: 10
+      value: 85
+      isOpen: 0
+      isBool: 0
+    - name: 9
+      value: 0
+      isOpen: 0
+      isBool: 0
+    changeAttributes: 1
+    autoEquip: 0
+    addToEquipArea: 0
+    indexArea: 0
+  - id: 7
+    name: 
+    amount: 1
+    attributes: []
+    changeAttributes: 0
+    autoEquip: 0
+    addToEquipArea: 0
+    indexArea: 0
+  - id: 24
+    name: 
+    amount: 1
+    attributes: []
+    changeAttributes: 0
+    autoEquip: 0
+    addToEquipArea: 0
+    indexArea: 0
+  - id: 10
+    name: 
     amount: 1
     attributes: []
     changeAttributes: 0
     autoEquip: 0
     addToEquipArea: 1
+    indexArea: 0
+  - id: 16
+    name: 
+    amount: 1
+    attributes:
+    - name: 2
+      value: 85
+      isOpen: 0
+      isBool: 0
+    - name: 6
+      value: 1000
+      isOpen: 0
+      isBool: 0
+    changeAttributes: 1
+    autoEquip: 0
+    addToEquipArea: 0
+    indexArea: 0
+  - id: 1
+    name: 
+    amount: 1
+    attributes:
+    - name: 2
+      value: 25
+      isOpen: 0
+      isBool: 0
+    - name: 3
+      value: 20
+      isOpen: 0
+      isBool: 0
+    - name: 4
+      value: 85
+      isOpen: 0
+      isBool: 0
+    - name: 5
+      value: 70
+      isOpen: 0
+      isBool: 0
+    changeAttributes: 1
+    autoEquip: 0
+    addToEquipArea: 0
+    indexArea: 0
+  - id: 22
+    name: 
+    amount: 1
+    attributes:
+    - name: 2
+      value: 25
+      isOpen: 0
+      isBool: 0
+    - name: 3
+      value: 20
+      isOpen: 0
+      isBool: 0
+    - name: 4
+      value: 85
+      isOpen: 0
+      isBool: 0
+    - name: 5
+      value: 70
+      isOpen: 0
+      isBool: 0
+    changeAttributes: 1
+    autoEquip: 0
+    addToEquipArea: 0
     indexArea: 0
   equipPoints:
   - equipPointName: LeftArm
