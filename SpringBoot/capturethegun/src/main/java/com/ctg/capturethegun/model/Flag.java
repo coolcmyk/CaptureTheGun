@@ -43,7 +43,7 @@ public class Flag {
     public void setForm3D(String form3D) {
         this.form3D = form3D;
     }
-    public void setLatitude(float latitude) {
+    public void setLatitude(float latitude) {   
         this.latitude = latitude;
     }
     public void setLongitude(float longitude) {
