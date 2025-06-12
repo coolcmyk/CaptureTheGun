@@ -36,7 +36,6 @@ public class FlagController {
             flag.setForm3D(flagDetails.getForm3D());
             flag.setLatitude(flagDetails.getLatitude());
             flag.setLongitude(flagDetails.getLongitude());
-            // Set other fields as needed
             return flagRepository.save(flag);
         }).orElseGet(() -> {
             flagDetails.setFlagId(id);

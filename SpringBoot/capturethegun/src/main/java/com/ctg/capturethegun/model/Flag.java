@@ -25,7 +25,7 @@ public class Flag {
     public int getFlagId() {
         return flagId;
     }
-    public String getForm3D() {
+    public String getForm3D() { 
         return form3D;
     }
     public float getLatitude() {

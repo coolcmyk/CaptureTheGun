@@ -11,6 +11,25 @@ namespace Invector.vCharacterController
     {
         #region Variables               
 
+        #region customVariables
+        [SerializeField] protected float _maxSuspicion = 100f;
+        public virtual float maxSuspicion { get { return _maxSuspicion; } set { _maxSuspicion = value; } }
+        [SerializeField] protected float _currentSuspicion = 0f;
+        public virtual float currentSuspicion { get { return _currentSuspicion; } set { _currentSuspicion = Mathf.Clamp(value, 0, maxSuspicion); } }
+
+        public virtual void AddSuspicion(float amount) {currentSuspicion += amount; }
+        public virtual void ReduceSuspicion(float amount) { currentSuspicion -= amount; }
+        [SerializeField] protected float _maxProgress = 100f;
+        public virtual float maxProgress { get { return _maxProgress; } set { _maxProgress = value; } }
+        [SerializeField] protected float _currentProgress = 0f;
+        public virtual float currentProgress { get { return _currentProgress; } set { _currentProgress = Mathf.Clamp(value, 0, maxProgress); } }
+
+        public virtual void AddProgress(float amount){ currentProgress += amount; }
+        public virtual void ReduceProgress(float amount){ currentProgress -= amount; }
+
+        #endregion
+
+
         #region Stamina       
 
         [vEditorToolbar("Stamina", order = 2)]
@@ -607,7 +626,6 @@ namespace Invector.vCharacterController
             StaminaRecovery();
             CalculateRotationMagnitude();
         }
-
         #region Health & Stamina
 
         public override void TakeDamage(vDamage damage)
