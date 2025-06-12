@@ -62,6 +62,73 @@ Assets/
 └── Utils/          - Utility scripts and helper functions
 ```
 
+---
+
+## Setup & Run Instructions
+
+### Prerequisites
+
+- [Unity 2022.3 LTS or newer](https://unity.com/)
+- [.NET 6+ SDK](https://dotnet.microsoft.com/en-us/download) (for backend development, if needed)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (for backend/server)
+- [Git](https://git-scm.com/)
+
+### 1. Clone the Repository
+
+```sh
+git clone https://github.com/coolcmyk/CaptureTheGun.git
+cd CaptureTheGun
+```
+
+### 2. Backend Setup (Spring Boot + PostgreSQL)
+
+#### **Windows**
+
+1. Open a terminal in `SpringBoot` directory.
+2. Run the setup script:
+
+   ```bat
+   setup.bat
+   ```
+
+#### **Linux/macOS**
+
+1. Open a terminal in `SpringBoot` directory.
+2. Run the setup script:
+
+   ```sh
+   ./setup.sh
+   ```
+
+This will:
+- Build the Spring Boot JAR using Gradle
+- Build the Docker image
+- Start the backend and database containers
+
+The backend will be available at [http://localhost:8080](http://localhost:8080).
+
+### 3. Unity Project Setup
+
+1. Open the project folder in Unity Hub.
+2. Open the main scene or any scene you want to test.
+3. Press Play to start the game in the editor.
+
+### 4. Testing Backend Integration
+
+- The Unity game will communicate with the backend at `http://localhost:8080`.
+- Make sure Docker containers are running before pressing Play in Unity.
+
+### 5. Stopping the Backend
+
+To stop the backend and database, run:
+
+```sh
+docker-compose down
+```
+from the `SpringBoot` directory.
+
+---
+
 ## Development Status
 
 ## Team
